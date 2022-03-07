@@ -451,6 +451,171 @@ fastify.get('/articles/:id', (request, reply) => {
 \< `{ id: "1" }`
 
 ---
+layout: intro
+---
+
+# Valider la donnée
+
+---
+
+## Valider la donnée
+
+> 💡 **"Never trust user input"**
+
+Lors du développemment d'une API, il est primordial de s'assurer que les utilisateurs envoient et reçoivent la donnée attendue.
+Fastify fourni des outils pour valider ces données, basé sur les [`JSON schema`](https://json-schema.org/learn/getting-started-step-by-step).
+
+Prenons pour exemple le JSON ci-dessous qui représenterait une adresse sur une carte :
+```json
+{
+  "name": "Web School Factory",
+  "address": "29 rue Didot, 75014 Paris",
+  "category": "School"
+}
+```
+---
+
+On pourrait le décrire de la façon suivante :
+
+```json
+{
+  "type": "object",
+  "title": "address",
+  "properties": {
+    "name": { "type": "string" },
+    "address": { "type": "string" },
+    "category": { 
+      "type": "string",
+      "enum": ["School", "Shop", "Cinema", "Restaurant"]
+    },
+  },
+  "required": ["name", "address"]
+}
+```
+
+---
+
+Il est possible qu'un objet contiennent un autre objet. Ici la propriété `position` en est un :
+
+```json
+{
+  "name": "Web School Factory",
+  "address": "29 rue Didot, 75014 Paris",
+  "category": "School",
+  "position": {
+    "lat": 48.82772489330344,
+    "lon": 2.3146392659104555
+  }
+}
+```
+
+> ⚙️ [Tester](https://stackblitz.com/edit/node-ajv-basic)
+
+---
+
+```json
+{
+  "type": "object",
+  "title": "address",
+  "properties": {
+    "name": { "type": "string" },
+    "address": { "type": "string" },
+    "category": { 
+      "type": "string",
+      "enum": ["School", "Shop", "Cinema", "Restaurant"]
+    },
+    "position": {
+      "type": "object",
+      "properties": {
+        "lat": {
+          "type": "number", "minimum": -90, "maximum": 90
+        },
+        "lon": {
+          "type": "number", "minimum": -180, "maximum": 180
+        }
+      },
+      "required": ["lat", "lon"]
+    }
+  },
+  "required": ["name", "address", "position"]
+}
+```
+---
+
+## La validation des données avec Fastify
+
+En définissant une route, il est possible de spécifier des options en deuxième argument. Notamment le schema, ici le schema décrit la réponse attendue :
+
+```js
+const basicSchema = {
+  response: {
+    200: {
+      type: 'object',
+      properties: {
+        message: { type: 'string' },
+      },
+    },
+  },
+}
+
+app.get('/', { schema: basicSchema }, home)
+```
+
+> - [Documentation officielle](https://www.fastify.io/docs/latest/Getting-Started/#validate-your-data)
+> - [Documentation officielle avancée](https://www.fastify.io/docs/latest/Validation-and-Serialization/)
+
+---
+
+## La validation des données avec Fastify
+
+Il est possible de valider d'autres propriétés de la requête telles que la `querystring`, les `params`, ou le `body`. Par exemple :
+
+```js
+export const helloSchema = {
+  querystring: {
+    type: 'object',
+    properties: {
+      name: { type: 'string' },
+    },
+    required: [], // optionnel, aucune propriété n'est requise
+    additionalProperties: false, // remove other propertiers
+  },
+  response: {
+    200: {
+      type: 'object',
+      properties: {
+        message: { type: 'string' },
+      },
+    },
+  },
+}
+```
+
+---
+
+## Valider les paramètres de la requêtes
+
+Les schémas ne font pas que modifier la donnée mais il peuvent aussi la modifier pour l'adapter à ce qui est attendu.
+
+```js
+const schema = {
+  params: {
+    type: 'object',
+    properties: { id: { type: 'number' } },
+  },
+}
+
+fastify.get('/articles/:id', { schema}, (request, reply) => {
+  reply.send({ id: request.params.id })
+})
+```
+
+\> `GET /articles/1`
+\< `{ id: 1 }`
+ 
+Ici, l'`id` est automatiquement converti en nombre grâce au schema de validation
+
+---
 
 ## À propos de Fastify
 
@@ -468,10 +633,16 @@ Pour aller plus loin :
 - What if I told you that HTTP can be fast by @delvedor : [Slides](https://delvedor.github.io/What-if-I-told-you-that-HTTP-can-be-fast) - [Video](https://www.webexpo.net/prague2017/talk/what-if-i-told-you-that-http-can-be-fast/)
 
 ---
+layout: intro
+---
+
+# HTTP Basics
+
+---
 
 ## HTTP Basics
 
-Une URL (Uniform Resource Locator) ou "adresse web" associe une chaine de caractère à une ressource sur le web. Elle précise le protocole à utiliser (notamment HTTP ou HTTPS), le domaine ou hôte, suivi du *path* et éventuellement d'une "query".
+Une URL (Uniform Resource Locator) ou "adresse web" associe une chaine de caractère à une ressource sur le web. Elle précise le protocole à utiliser (notamment HTTP ou HTTPS), le domaine ou "hôte", suivi du *path* et éventuellement d'une *query*.
 
 > 💡 HTTP utilise par défaut le port **80** et HTTPS **443**. Ainsi, nous n'utilisons pas les ports au quotidien. Ils sont utiles en tant que développeur notamment pour lancer plusieurs serveurs sur des ports différents en local.
 
@@ -514,7 +685,7 @@ Considérons une URL avec une ressource "articles": https://my-personal-blog.com
 
 Les *status codes* sont des codes de réponse indiquant si une requête a réussi ou échoué.
 
-Le standard défini un grand nombre de code pour gérer toutes les situations mais dans les faits ils suffit de connaîtres les principaux.
+Le standard défini un grand nombre de codes pour gérer toutes les situations mais dans les faits il suffit de connaître les principaux.
 
 En voici quelques uns :
 
@@ -523,5 +694,3 @@ En voici quelques uns :
 - 5xx: Server error (**500**: Internal Server Error, **504**: Gateway Timeout)
 
 > 👉 [Documentation MDN](https://developer.mozilla.org/fr/docs/Web/HTTP/Status)
-
----
