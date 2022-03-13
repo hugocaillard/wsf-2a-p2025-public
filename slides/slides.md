@@ -595,7 +595,7 @@ export const helloSchema = {
 
 ## Valider les paramètres de la requêtes
 
-Les schémas ne font pas que modifier la donnée mais il peuvent aussi la modifier pour l'adapter à ce qui est attendu.
+Les schémas ne font pas que valider la donnée mais il peuvent aussi la modifier pour l'adapter à ce qui est attendu.
 
 ```js
 const schema = {
@@ -614,6 +614,98 @@ fastify.get('/articles/:id', { schema}, (request, reply) => {
 \< `{ id: 1 }`
  
 Ici, l'`id` est automatiquement converti en nombre grâce au schema de validation
+
+---
+layout: intro
+---
+
+# Données dynamiques - Récaptitulatif
+
+---
+
+## Query string
+
+`GET /hello?name=bob@age=42`
+
+```ts {all|2|3|5-6|8-9|13|14-15|all}
+const helloSchema = {
+  querystring: {
+    type: 'object',
+    properties: {
+      name: { type: 'string' },
+      age: { type: 'number' },
+    },
+    required: [], // nothing's required
+    additionalProperties: false, // remove other propertiers
+  },
+}
+
+app.get('/hello', { schema: helloSchema }, (request, reply) => {
+  const name = request.query.name
+  const age = request.query.age
+
+  const message = name ? `Hello ${name}` : 'Hello world'
+  if (age) console.log(age)
+
+  reply.send({ message })
+})
+```
+
+---
+
+## URL parameters
+`GET /articles/1`
+
+```ts {all|4|7|9|15|all}
+const articles = [{ id: 1, title: 'Hello' }] // fake array of articles
+
+const articlesSchema = {
+  params: {
+    type: 'object',
+    properties: {
+      id: { type: 'number' },
+    },
+    required: ['id'],
+    additionalProperties: false,
+  },
+}
+
+app.get('/articles/:id', { schema: articlesSchema }, (request, reply) => {
+  const id = request.params.id
+  const article = articles.find((a) => a.id === id)
+  if (!article) {
+    return reply.code(404).send({ error: 'article not found', id })
+  }
+  reply.send({ article })
+})
+```
+---
+
+## Body
+
+`POST /messages { "pseudo": "Bob", "message": "Hello world" }`
+
+```ts
+const messages = [] // fake message store
+const messageSchema = {
+  body: {
+    type: 'object',
+    properties: {
+      pseudo: { type: 'string' },
+      message: { type: 'string' },
+    },
+    required: ['pseudo', 'message'],
+    additionalProperties: false,
+  },
+}
+
+app.post('/messages', { schema: messageSchema }, (request, reply) => {
+  const message = request.body.message
+  messages.push(message)
+
+  reply.send({ message: 'message received' })
+})
+```
 
 ---
 
@@ -673,7 +765,7 @@ Considérons une URL avec une ressource "articles": https://my-personal-blog.com
 
 • `GET    /articles/:id` -> récupérer un article  
 • `PUT    /articles/:id` -> modifier l'ensemble des informations de l'article  
-• `PATH   /articles/:id` -> modifier une ou plusieurs informations de l'article (eg: "author")  
+• `PATCH   /articles/:id` -> modifier une ou plusieurs informations de l'article (eg: "author")  
 • `DELETE /articles/:id` -> supprimer l'article  
 
 
