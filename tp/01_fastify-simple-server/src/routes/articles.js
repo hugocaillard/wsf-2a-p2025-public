@@ -3,7 +3,7 @@ const articles = [
   { id: 2, title: 'Fake article 2' },
 ]
 
-export function articlesRoute(app) {
+export async function articlesRoute(app) {
   // app.get('/articles')
   // app.get('/articles/:id')
   // app.post('/articles')
