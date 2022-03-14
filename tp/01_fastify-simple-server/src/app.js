@@ -10,8 +10,10 @@ export function build(options = {}) {
   const app = fastify(options)
 
   app.register(routes)
-  app.register(demoRoutes)
   app.register(articlesRoute)
+
+  // les demo routes ne sont pas requises pour le TP
+  app.register(demoRoutes)
 
   return app
 }
