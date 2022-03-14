@@ -63,6 +63,6 @@ export async function demoRoutes(app) {
     const message = request.body.message
     messages.push(message)
 
-    reply.send({ message: 'message received' })
+    reply.status(201).send({ message: 'message received' })
   })
 }
