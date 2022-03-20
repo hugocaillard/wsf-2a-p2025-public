@@ -29,8 +29,7 @@ export function initChat() {
     if (!pseudo || !body) return
     localStorage.setItem('pseudo', pseudo)
 
-    const newMessage = { pseudo, body }
-    ws.send(JSON.stringify(newMessage))
+    ws.send(JSON.stringify({ pseudo, body }))
     messageForm.body.value = null
   })
 }
