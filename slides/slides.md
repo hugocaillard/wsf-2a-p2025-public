@@ -786,3 +786,32 @@ En voici quelques uns :
 - 5xx: Server error (**500**: Internal Server Error, **504**: Gateway Timeout)
 
 > 👉 [Documentation MDN](https://developer.mozilla.org/fr/docs/Web/HTTP/Status)
+
+---
+layout: intro
+---
+
+# TP 02 - Realtime chat webapp
+
+---
+
+## Objectif
+
+- Réaliser un système de messagerie en temps réel avec Fastify et Fastify WebSocket.
+- Développer l'application front-end de la messagerie
+
+---
+
+## Fonctionnalités à implémenter
+
+- Sauvegarder et afficher la date de publication d'un message
+- Récupérer l'historique des messages récents
+- Sécuriser le service (ex: éviter les pseudos ou message trop longs)
+
+## Autres idées de fonctionalités
+
+- "Réactions" à un message (emoji)
+- Système d'authentification simple (et éviter les doublons de pseudos)
+- Pouvoir supprimer ses propres messages
+- Améliorer le style de l'application
+- Système de modération (ex: répérer et filter les messages à caractèr haineux)
