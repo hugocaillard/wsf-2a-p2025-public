@@ -786,3 +786,42 @@ En voici quelques uns :
 - 5xx: Server error (**500**: Internal Server Error, **504**: Gateway Timeout)
 
 > 👉 [Documentation MDN](https://developer.mozilla.org/fr/docs/Web/HTTP/Status)
+
+---
+layout: intro
+---
+
+# TP 02 - Realtime chat webapp
+
+---
+
+## Objectifs
+
+- Réaliser un système de messagerie en temps réel avec Fastify et Fastify WebSocket
+- Développer l'application front-end de la messagerie
+- L'ensemble du code doit être bien organiser, structure, lisible et compréhensible
+- L'aspect sécurité sera également à prendre en compte
+
+## Consignes
+
+- Équipes de 2 à 3 personnes
+- Pour la partie **back** : partir du [code de la démo](https://github.com/hugocaillard/wsf-2a-p2025-public/tree/main/tp/02_realtime-chat/back)
+- Pour la partie **front** : le [code de la démo](https://github.com/hugocaillard/wsf-2a-p2025-public/tree/main/tp/02_realtime-chat/front) est disponible également, libre à vous en servir ou simplement de vous en inspirer
+- Il n'est pas nécessaire de déployer le code en ligne
+
+---
+
+## Fonctionnalités à implémenter
+
+- Sauvegarder et afficher la date de publication d'un message
+- Récupérer l'historique des messages récents
+- Sécuriser le service (ex: éviter les pseudos ou message trop longs)
+- Différencier les messages envoyés des messages reçus
+
+## Autres idées de fonctionalités
+
+- Améliorer le style de l'application
+- Système d'authentification simple (et éviter les doublons de pseudos)
+- Pouvoir supprimer ses propres messages
+- "Réactions" à un message (emoji)
+- Système de modération (ex: repérer et filtrer les messages à caractère haineux)
