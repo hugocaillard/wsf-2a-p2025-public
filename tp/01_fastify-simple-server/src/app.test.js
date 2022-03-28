@@ -31,7 +31,7 @@ describe('GET /', () => {
   })
 })
 
-describe.only('GET /hello', () => {
+describe('GET /hello', () => {
   it('returns json format', async () => {
     const response = await app.inject({ method: 'GET', url: '/hello' })
 
@@ -40,7 +40,7 @@ describe.only('GET /hello', () => {
   })
 })
 
-describe.only('GET /hello?name=<params>', () => {
+describe('GET /hello?name=<params>', () => {
   it('returns "Hello world" if no name is passed', async () => {
     const response = await app.inject({
       method: 'GET',
@@ -73,7 +73,7 @@ describe.only('GET /hello?name=<params>', () => {
   })
 })
 
-describe.only('GET /notfound', () => {
+describe('GET /notfound', () => {
   const url = `/notfound-${Date.now()}` // random string for test purpose
   it('returns error an message with status code 404', async () => {
     const response = await app.inject({ method: 'GET', url })
@@ -105,7 +105,7 @@ describe('POST /message', () => {
     })
   })
 
-  it('should only return `message` and `random`', async () => {
+  it('should return `message` and `random`', async () => {
     const response = await app.inject({
       url: '/message',
       method: 'POST',
