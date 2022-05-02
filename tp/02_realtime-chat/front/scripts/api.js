@@ -1,10 +1,12 @@
+const base = 'http://localhost:5000'
+
 /**
  * @param {string} url
  * @param {RequestInit} options
  * @returns {Promise<Record<string, any>>}
  */
 export async function fetchAPI(url, options = {}) {
-  const res = await fetch(`http://localhost:5000${url}`, {
+  const res = await fetch(`${base}${url}`, {
     headers: {
       'Content-Type': 'application/json',
     },

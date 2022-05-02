@@ -1,6 +1,7 @@
 import fastify from 'fastify'
 import fastifyCors from 'fastify-cors'
-import fastifyWS from 'fastify-websocket'
+import helmet from 'fastify-helmet'
+import ws from 'fastify-websocket'
 
 import { chatRoutes } from './routes/chat.js'
 
@@ -10,13 +11,13 @@ import { chatRoutes } from './routes/chat.js'
 export function build(options = {}) {
   const app = fastify(options)
 
+  app.register(helmet)
   app.register(fastifyCors)
-  app.register(fastifyWS)
+  app.register(ws)
 
   app.get('/', (request, reply) => {
     reply.send({ message: 'welcome on wsf realtime chat' })
   })
-
   app.register(chatRoutes, { prefix: '/chat' })
 
   return app

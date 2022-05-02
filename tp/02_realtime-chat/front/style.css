@@ -42,6 +42,9 @@ main {
   max-height: calc(100vh - 212px);
   overflow: scroll;
 }
+main.smooth {
+  scroll-behavior: smooth;
+}
 
 main .top-space {
   /* push messages at the bottom */
@@ -56,12 +59,28 @@ main .top-space {
   margin-bottom: 18px;
 }
 
+.message.self {
+  align-self: flex-end;
+  border: none;
+  background-color: #eee;
+}
+
 .message p {
   font-size: large;
 }
 
 .message span {
   font-size: small;
+}
+
+.message span + span {
+  display: inline-block;
+  color: #888;
+  margin-left: 4px;
+}
+
+.message > span + span::before {
+  content: ' - ';
 }
 
 /* FORM */
